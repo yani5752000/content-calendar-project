@@ -6,8 +6,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -40,9 +42,19 @@ public class contentController {
     //     repository.deletContent(id);
     // }
 
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("")
     void create(@RequestBody Content content) {
         System.out.println(" we got to postmapping!!!!");
+        repository.save(content);
+    }
+
+    @PutMapping("/{id}")
+    public void updat (@RequestBody Content content, @PathVariable Integer id) {
+        if(!repository.existById(id)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Content not found");
+        }
+
         repository.save(content);
     }
 }
